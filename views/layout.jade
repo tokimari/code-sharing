@@ -1,0 +1,9 @@
+doctype 5
+html
+	head
+		title= title
+		link(rel='stylesheet', href='css/editor.css')
+		script(src='/socket.io/socket.io.js')
+		script(src='js/lib/require.js', 'data-main'='js/index.js')
+	body
+		block content
