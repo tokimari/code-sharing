@@ -43,17 +43,28 @@ var socket = io.listen(server);
 //socket.set('log level', 1);
 
 var code = '';
+var pass = 'password';
+var token = 'token';
 socket.on('connection', function (client) {
 
 	client.on('setValue', function (data) {
-		code = data.value;
-		client.broadcast.emit('setValue', {value: code});
+		if (data.token !== token) return;
+			code = data.value;
+			client.broadcast.emit('setValue', {value: code});
 	});
 
 	client.on('getValue', function () {
 		client.emit('setValue', {
 			value: code
 		});
+	});
+
+	client.on('getToken', function(password) {
+		if (password === pass) {
+			client.emit('setToken', token);
+		} else {
+			client.emit('setToken');
+		}
 	});
 
 

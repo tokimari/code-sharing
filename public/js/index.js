@@ -8,7 +8,7 @@ require({
 
 define(['ace'], function (ace) {
 	var socket = io.connect(location.origin);
-	var editor;
+	var editor, token;
 	var hash = location.hash;
 	var init = function () {
 		// get ace object from global
@@ -20,18 +20,36 @@ define(['ace'], function (ace) {
 		editor.setTheme("ace/theme/monokai");
 		editor.getSession().setMode("ace/mode/javascript");
 
-		// for debug
+		// default setting read only
 		editor.setReadOnly(true);
+
 		if (hash === '#master-note') {
+			var password = prompt('give me password.');
+			socket.emit('getToken', password);
+			socket.on('setToken', function(t) {
+				if (t) {
+					token = t;
+				} else {
+					location.href = 'https://yahoo.com';
+				}
+			});
+
+			// for console debug
 			window.editor = editor;
+
+			// set writable
 			editor.setReadOnly(false);
+
 			document.onkeyup = function(e) {
 				var code = editor.getValue();
 				socket.emit('setValue', {
-					value: code
+					value: code,
+					token: token
 				});
 			};
 		}
+
+		// init data
 		socket.emit('getValue');
 	};
 
