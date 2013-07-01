@@ -1,7 +1,7 @@
 require({
 	baseUrl: '',
 	paths: {
-		'ace': 'js/ace/ace'
+		'ace': 'js/lib/ace/ace'
 	}
 });
 
