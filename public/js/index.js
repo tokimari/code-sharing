@@ -36,8 +36,9 @@ define(['ace'], function (ace) {
 	};
 
 	socket.on('setValue', function (data) {
-		editor.setValue(data.value);
 		var anc = editor.selection.getSelectionAnchor();
+		editor.setValue(data.value);
+		editor.selection.setSelectionAnchor(anc.row, anc.column);
 		editor.selection.setSelectionRange({start: anc, end: anc});
 	});
 
